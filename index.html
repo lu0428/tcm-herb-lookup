@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="中藥材採購查詢——真偽辨識、市售等級、保存。自用工具。">
+<title>中藥材查詢庫</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8C%BF%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="brand-row">
+      <span class="logo" id="brandLogo" aria-hidden="true">🌿</span>
+      <div class="brand-text">
+        <h1 id="brandName">中藥材查詢庫</h1>
+        <span class="tagline" id="brandTagline">採購辨真偽・辨品質</span>
+      </div>
+      <button class="theme" id="themeBtn" title="切換深淺主題" aria-label="切換深淺主題">◐</button>
+    </div>
+
+    <div class="searchbar">
+      <span class="s-icon" aria-hidden="true">🔍</span>
+      <input id="q" type="search" inputmode="search" autocomplete="off"
+             placeholder="搜藥材名／別名／學名…（例：茯苓、雲苓、Poria）" aria-label="搜尋藥材">
+      <button class="s-clear" id="clearBtn" title="清除" aria-label="清除搜尋" hidden>✕</button>
+    </div>
+
+    <div class="filters" id="filters" role="group" aria-label="篩選">
+      <!-- 賣法分類 chips + 警示 toggle 由 app.js 生成 -->
+    </div>
+  </header>
+
+  <div class="statline">
+    <span id="count" class="count">—</span>
+    <span class="spacer"></span>
+    <span id="dataMeta" class="datameta"></span>
+  </div>
+
+  <main id="list" class="list" aria-live="polite"><!-- 卡片由 app.js 生成 --></main>
+
+  <div id="empty" class="empty" hidden>
+    <p class="e-big">查無藥材</p>
+    <p class="e-sub">換個關鍵字試試，或清除篩選條件。市場俗名也可以搜（例：淮山＝山藥）。</p>
+  </div>
+
+  <footer>
+    <span id="footMeta"></span><br>
+    自用查詢工具 · 資料為中藥材採購辨識參考，非醫療建議
+  </footer>
+
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

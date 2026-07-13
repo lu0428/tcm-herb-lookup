@@ -1,0 +1,151 @@
+/* 中藥材查詢庫 — 沿用驗收網頁紙感配色 · 深淺主題 · RWD
+   視覺基底來自 _ref/參考_yanshou7_review.html */
+:root{
+  --paper:#f7f5f0; --ink:#23201a; --ink-soft:#5f584c; --line:#e0d9cc;
+  --card:#fffdf8; --raise:#f1ece1;
+  --seal:#b0472f; --herb:#5c6b4a; --amber:#b6811f;
+  --pill-bg:#eee7d9; --pill-ink:#6a6152;
+  --ok-bg:#e7ecdd; --ok-ink:#41502c;
+  --warn-bg:#f6e6c8; --warn-ink:#8a5a12;
+  --red-bg:#f3ddd4; --red-ink:#9a3a24;
+  --mono:"SFMono-Regular",Consolas,"Liberation Mono",monospace;
+  --serif:Georgia,"Songti TC","STSong","Noto Serif TC",serif;
+  --sans:"PingFang TC","Microsoft JhengHei","Noto Sans TC","Hiragino Sans TC",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root{ --paper:#1a1917; --ink:#e8e4da; --ink-soft:#a49c8d; --line:#33302a;
+    --card:#211f1c; --raise:#2a2723; --seal:#d1694f; --herb:#93a476; --amber:#d3a24a;
+    --pill-bg:#2c2924; --pill-ink:#b3aa99;
+    --ok-bg:#2a3020; --ok-ink:#a8bd84; --warn-bg:#372c17; --warn-ink:#dcac5b;
+    --red-bg:#3a2620; --red-ink:#e0937c; }
+}
+:root[data-theme="dark"]{ --paper:#1a1917; --ink:#e8e4da; --ink-soft:#a49c8d; --line:#33302a;
+  --card:#211f1c; --raise:#2a2723; --seal:#d1694f; --herb:#93a476; --amber:#d3a24a;
+  --pill-bg:#2c2924; --pill-ink:#b3aa99; --ok-bg:#2a3020; --ok-ink:#a8bd84;
+  --warn-bg:#372c17; --warn-ink:#dcac5b; --red-bg:#3a2620; --red-ink:#e0937c; }
+:root[data-theme="light"]{ --paper:#f7f5f0; --ink:#23201a; --ink-soft:#5f584c; --line:#e0d9cc;
+  --card:#fffdf8; --raise:#f1ece1; --seal:#b0472f; --herb:#5c6b4a; --amber:#b6811f;
+  --pill-bg:#eee7d9; --pill-ink:#6a6152; --ok-bg:#e7ecdd; --ok-ink:#41502c;
+  --warn-bg:#f6e6c8; --warn-ink:#8a5a12; --red-bg:#f3ddd4; --red-ink:#9a3a24; }
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);
+  line-height:1.7;-webkit-font-smoothing:antialiased}
+.wrap{max-width:860px;margin:0 auto;padding:0 16px 96px}
+
+/* ── 頁首（sticky）＋品牌 ── */
+header.top{position:sticky;top:0;z-index:20;
+  background:color-mix(in srgb,var(--paper) 93%,transparent);
+  backdrop-filter:blur(8px);border-bottom:1px solid var(--line);
+  margin:0 -16px;padding:12px 16px 10px}
+.brand-row{display:flex;align-items:center;gap:11px}
+.logo{font-size:26px;line-height:1;flex:none;width:40px;height:40px;
+  display:grid;place-items:center;background:var(--raise);border-radius:11px;border:1px solid var(--line)}
+.logo img{width:100%;height:100%;object-fit:contain;border-radius:11px}
+.brand-text{display:flex;flex-direction:column;gap:1px;min-width:0}
+h1{font-family:var(--serif);font-weight:600;font-size:19px;margin:0;letter-spacing:.01em}
+.tagline{color:var(--ink-soft);font-size:12px}
+.theme{margin-left:auto;background:transparent;border:1px solid var(--line);color:var(--ink-soft);
+  border-radius:9px;width:36px;height:36px;cursor:pointer;font-size:15px;flex:none}
+.theme:focus-visible{outline:2px solid var(--seal);outline-offset:2px}
+
+/* ── 搜尋框 ── */
+.searchbar{display:flex;align-items:center;gap:8px;margin-top:11px;
+  background:var(--card);border:1px solid var(--line);border-radius:11px;padding:2px 10px}
+.searchbar:focus-within{border-color:var(--herb);box-shadow:0 0 0 3px color-mix(in srgb,var(--herb) 18%,transparent)}
+.s-icon{font-size:15px;opacity:.7;flex:none}
+#q{flex:1;border:0;background:transparent;color:var(--ink);font-family:var(--sans);
+  font-size:16px;padding:11px 0;outline:none;min-width:0}
+#q::placeholder{color:var(--ink-soft);opacity:.8}
+#q::-webkit-search-cancel-button{display:none}
+.s-clear{flex:none;border:0;background:var(--raise);color:var(--ink-soft);border-radius:99px;
+  width:24px;height:24px;cursor:pointer;font-size:12px;line-height:1}
+
+/* ── 篩選 chips ── */
+.filters{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px;align-items:center}
+.chip{font-family:var(--sans);font-size:12.5px;border:1px solid var(--line);background:transparent;
+  color:var(--ink-soft);border-radius:99px;padding:5px 12px;cursor:pointer;white-space:nowrap;
+  transition:all .15s}
+.chip:hover{border-color:var(--herb)}
+.chip:focus-visible{outline:2px solid var(--herb);outline-offset:1px}
+.chip.on{background:var(--herb);border-color:var(--herb);color:#fff;font-weight:600}
+.chip.warn.on{background:var(--seal);border-color:var(--seal)}
+.chip-sep{width:1px;height:18px;background:var(--line);margin:0 2px}
+
+/* ── 統計列 ── */
+.statline{display:flex;align-items:baseline;gap:10px;margin:16px 2px 2px;font-size:12.5px;color:var(--ink-soft)}
+.count b{color:var(--ink);font-variant-numeric:tabular-nums}
+.spacer{flex:1}
+.datameta{font-family:var(--mono);font-size:11.5px}
+
+/* ── 卡片列表 ── */
+.list{display:flex;flex-direction:column;gap:11px;margin-top:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:13px;overflow:hidden;
+  transition:border-color .15s}
+.card.open{border-color:var(--herb)}
+.chead{display:flex;align-items:center;gap:10px;padding:14px 15px;cursor:pointer;user-select:none}
+.chead:hover{background:color-mix(in srgb,var(--herb) 5%,transparent)}
+.chead:focus-visible{outline:2px solid var(--herb);outline-offset:-2px}
+.cname{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.mname{font-family:var(--serif);font-size:18px;font-weight:600;line-height:1.25}
+.malias{font-size:12px;color:var(--ink-soft);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cpills{display:flex;gap:5px;align-items:center;flex-wrap:wrap;flex:none}
+.pill{font-size:10.5px;padding:2px 8px;border-radius:99px;font-weight:600;letter-spacing:.02em;white-space:nowrap}
+.p-sell{background:var(--pill-bg);color:var(--pill-ink)}
+.p-sell.可單方販售{background:var(--ok-bg);color:var(--ok-ink)}
+.p-sell.須複方{background:var(--warn-bg);color:var(--warn-ink)}
+.p-sell.限茶包型態{background:var(--pill-bg);color:var(--pill-ink)}
+.p-sell.待查{background:var(--raise);color:var(--ink-soft)}
+.pill.warn{background:var(--red-bg);color:var(--red-ink)}
+.caret{flex:none;color:var(--ink-soft);font-size:13px;transition:transform .2s;margin-left:2px}
+.card.open .caret{transform:rotate(90deg)}
+
+/* ── 詳情（展開） ── */
+.detail{display:none;padding:2px 15px 16px;border-top:1px solid var(--line)}
+.card.open .detail{display:block}
+.group{margin-top:14px}
+.group:first-child{margin-top:10px}
+.glabel{display:flex;align-items:center;gap:8px;font-family:var(--serif);font-size:14px;font-weight:600;
+  color:var(--herb);margin:0 0 8px;padding-bottom:5px;border-bottom:1px solid var(--line);cursor:pointer;user-select:none}
+.glabel.static{cursor:default}
+.glabel .gcaret{margin-left:auto;font-size:11px;color:var(--ink-soft);transition:transform .2s}
+.group.folded .glabel .gcaret{transform:rotate(-90deg)}
+.group.folded .gbody{display:none}
+.gbody{display:flex;flex-direction:column;gap:10px}
+
+/* 採購核心區：放大強調 */
+.group.core .glabel{color:var(--seal)}
+.group.core .field{grid-template-columns:82px 1fr}
+.group.core .ftext{font-size:14.5px}
+
+.field{display:grid;grid-template-columns:82px 1fr;gap:12px;align-items:start}
+.flabel{font-size:12px;color:var(--ink-soft);font-weight:600;padding-top:2px;text-align:right;
+  border-right:2px solid var(--line);padding-right:10px}
+.ftext{font-size:13.5px;color:var(--ink);white-space:pre-wrap;word-break:break-word;line-height:1.65}
+.ftext .tag{display:inline-block;font-size:11.5px;background:var(--raise);color:var(--ink-soft);
+  border-radius:6px;padding:1px 8px;margin:0 4px 3px 0}
+.opennt{display:inline-block;margin-top:12px;font-size:11.5px;color:var(--seal);
+  text-decoration:none;font-family:var(--mono)}
+.opennt:hover{text-decoration:underline}
+
+/* ── 空狀態 / footer / toast ── */
+.empty{text-align:center;padding:56px 20px;color:var(--ink-soft)}
+.empty .e-big{font-family:var(--serif);font-size:19px;color:var(--ink);margin:0 0 6px}
+.empty .e-sub{font-size:13px;margin:0}
+footer{margin-top:30px;text-align:center;font-size:11.5px;color:var(--ink-soft);line-height:1.8}
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);opacity:0;
+  background:var(--ink);color:var(--paper);padding:10px 18px;border-radius:10px;font-size:13px;
+  transition:all .25s;pointer-events:none;z-index:40}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ── 手機 ── */
+@media (max-width:560px){
+  .group.core .field,.field{grid-template-columns:1fr;gap:3px}
+  .flabel{text-align:left;border-right:0;border-left:2px solid var(--line);padding-right:0;padding-left:9px}
+  .mname{font-size:17px}
+  .chead{padding:13px 13px}
+  /* 注意：手機不可對 .cpills 設 width:100%——.chead 是 nowrap flex，
+     會把 .cname 擠成 0 寬導致藥材名直排。pill 維持在名稱右側 inline。 */
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
