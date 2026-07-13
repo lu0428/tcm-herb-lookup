@@ -58,7 +58,11 @@ function isEmpty(v){
 }
 // 警示判定：限醫療不可網售，或特殊注意含毒性/硫燻等關鍵字
 const WARN_RE = /劇毒|有毒|小毒|烏頭鹼|毒性|硫磺|硫燻|石棉|限醫療|孕婦(?:忌|慎)|保育類/;
+// 關鍵字誤判排除：這幾味注意事項裡的「毒」是在講「別的植物」或否定句，本身非警示。
+// （暫時手段；之後改用 Notion 明確的「警示」欄位驅動就會拿掉這段。）
+const WARN_EXCLUDE = new Set(["七葉膽","密蒙花","白首烏"]);
 function isWarn(h){
+  if(WARN_EXCLUDE.has(h[F_NAME])) return false;
   return h[F_LAW]==="限醫療不可網售" || WARN_RE.test(h[F_CAUTION]||"");
 }
 function fieldToText(v){
