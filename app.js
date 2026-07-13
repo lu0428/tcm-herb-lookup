@@ -75,7 +75,7 @@ function setFieldText(el, text){
 
 /* ── 狀態 ── */
 let ALL = [];
-let state = { q:"", sell:"", warnOnly:false };
+let state = { q:"", sell:"" };
 
 /* ── 啟動 ── */
 function init(){
@@ -124,15 +124,12 @@ function buildFilters(){
   present.forEach(o=>{
     frag.appendChild(mkChip(o, state.sell===o, "", ()=>{ state.sell = state.sell===o?"":o; render(); }));
   });
-  const sep = document.createElement("span"); sep.className="chip-sep"; frag.appendChild(sep);
-  frag.appendChild(mkChip("⚠️ 僅警示", state.warnOnly, "warn", ()=>{ state.warnOnly=!state.warnOnly; render(); }));
   box.replaceChildren(frag);
 }
 function refreshChips(){
   document.querySelectorAll("#filters .chip").forEach(c=>{
     const t = c.textContent;
     if(t==="全部") c.classList.toggle("on", state.sell==="");
-    else if(t==="⚠️ 僅警示") c.classList.toggle("on", state.warnOnly);
     else c.classList.toggle("on", state.sell===t);
   });
 }
@@ -155,7 +152,6 @@ function filtered(){
   const nq = norm(state.q);
   return ALL.filter(h=>{
     if(state.sell && h[F_SELL]!==state.sell) return false;
-    if(state.warnOnly && !isWarn(h)) return false;
     if(nq){
       const hay = norm(h[F_NAME]) + norm(h[F_ALIAS]) + norm(h[F_SOURCE]);
       if(!hay.includes(nq)) return false;
@@ -171,7 +167,7 @@ function render(){
   const empty = document.getElementById("empty");
   const total = ALL.length;
   const cnt = document.getElementById("count");
-  cnt.innerHTML = (state.q||state.sell||state.warnOnly)
+  cnt.innerHTML = (state.q||state.sell)
     ? `符合 <b>${rows.length}</b> / ${total} 味`
     : `共 <b>${total}</b> 味`;
 
