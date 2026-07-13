@@ -97,6 +97,7 @@ h1{font-family:var(--serif);font-weight:600;font-size:19px;margin:0;letter-spaci
 .p-sell.須複方{background:var(--warn-bg);color:var(--warn-ink)}
 .p-sell.限茶包型態{background:var(--pill-bg);color:var(--pill-ink)}
 .p-sell.待查{background:var(--raise);color:var(--ink-soft)}
+.p-sell.台灣不可作食品販售{background:var(--red-bg);color:var(--red-ink)}
 .pill.warn{background:var(--red-bg);color:var(--red-ink)}
 .caret{flex:none;color:var(--ink-soft);font-size:13px;transition:transform .2s;margin-left:2px}
 .card.open .caret{transform:rotate(90deg)}
