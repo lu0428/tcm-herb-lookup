@@ -35,8 +35,7 @@ const F_NAME = "藥材名（正名）";
 const F_ALIAS = "別名／商品名";
 const F_SOURCE = "基源（學名）";
 const F_SELL = "賣法分類";
-const F_LAW = "法規分類";
-const F_CAUTION = "特殊注意事項";
+const F_WARN = "警示";   // Notion multi_select（目前只有「毒性」）；卡片顯示「⚠️ 毒性」標籤
 
 // 篩選列顯示的賣法分類（不含「待查」——那 6 味卡片仍會顯示「待查」標籤，只是不放篩選鈕）
 const SELL_OPTIONS = ["可單方販售","須複方","限茶包型態","台灣不可作食品販售"];
@@ -56,15 +55,8 @@ function isEmpty(v){
   if(Array.isArray(v)) return v.length===0;
   return String(v).trim()==="";
 }
-// 警示判定：限醫療不可網售，或特殊注意含毒性/硫燻等關鍵字
-const WARN_RE = /劇毒|有毒|小毒|烏頭鹼|毒性|硫磺|硫燻|石棉|限醫療|孕婦(?:忌|慎)|保育類/;
-// 關鍵字誤判排除：這幾味注意事項裡的「毒」是在講「別的植物」或否定句，本身非警示。
-// （暫時手段；之後改用 Notion 明確的「警示」欄位驅動就會拿掉這段。）
-const WARN_EXCLUDE = new Set(["七葉膽","密蒙花","白首烏"]);
-function isWarn(h){
-  if(WARN_EXCLUDE.has(h[F_NAME])) return false;
-  return h[F_LAW]==="限醫療不可網售" || WARN_RE.test(h[F_CAUTION]||"");
-}
+// 毒性判定：直接讀 Notion「警示」欄（人工標記，不再猜關鍵字）。含「毒性」→ 卡片掛「⚠️ 毒性」。
+function isToxic(h){ return Array.isArray(h[F_WARN]) && h[F_WARN].includes("毒性"); }
 function fieldToText(v){
   return Array.isArray(v) ? v.join("、") : (v==null?"":String(v));
 }
@@ -209,8 +201,8 @@ function renderCard(h, i){
   if(!isEmpty(h[F_SELL])){
     const p=document.createElement("span"); p.className=`pill p-sell ${h[F_SELL]}`; p.textContent=h[F_SELL]; pills.appendChild(p);
   }
-  if(isWarn(h)){
-    const p=document.createElement("span"); p.className="pill warn"; p.textContent="⚠️ 警示"; pills.appendChild(p);
+  if(isToxic(h)){
+    const p=document.createElement("span"); p.className="pill warn"; p.textContent="⚠️ 毒性"; pills.appendChild(p);
   }
 
   const caret = document.createElement("span"); caret.className="caret"; caret.textContent="▸"; caret.setAttribute("aria-hidden","true");
